@@ -7,7 +7,7 @@
 
 require 'pry'
 
-# module
+# Substitution Cipher analyzer.
 module Substitution
   @map = {}
   def self.mapping(cipher, plane)
