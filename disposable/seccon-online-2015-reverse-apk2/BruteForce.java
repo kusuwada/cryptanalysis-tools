@@ -16,11 +16,12 @@ import javax.crypto.spec.SecretKeySpec;
 class BruteForce {
 
 	static final char[] candidates = "0123456789abcdef".toCharArray();
-  static final int candLength = candidates.length;
+	static final int candLength = candidates.length;
 
 	public static void main(String args[]){
 		System.out.println("candidates" + candidates);
 		int count = 0;
+
 		double[] powers = new double[16];
 		for (int i = 0; i < 16; i ++) {
 			powers[i] = Math.pow(candLength, i+1);
@@ -36,16 +37,16 @@ class BruteForce {
 			byte[] stream = tryData(uid);
 			if (stream != null) {
 				try {
-				  String flag = new String(stream, "UTF-8");
+					String flag = new String(stream, "UTF-8");
 					System.out.println("flag = " + flag);
 					if(flag.startsWith("SECCON{")) {
 						System.out.println("flag = " + flag);
-					  break;
+						break;
 					}
 				} catch (Exception e) {
-				  System.out.println("Cannot convert to string!");
+					System.out.println("Cannot convert to string!");
 				}
-		  }
+			}
 			count ++;
 		}
 		return;
@@ -56,17 +57,17 @@ class BruteForce {
 		byte[] flag = null;
 		try
 		{
-		SecretKeySpec key = new SecretKeySpec(uid.getBytes(), "AES");
-		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		cipher.init(2, key);
-		byte[] stream = function(strKey.getBytes());
-		flag = cipher.doFinal(stream);
-	  }
-    catch(Throwable e)
+			SecretKeySpec key = new SecretKeySpec(uid.getBytes(), "AES");
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(2, key);
+			byte[] stream = function(strKey.getBytes());
+			flag = cipher.doFinal(stream);
+		}
+		catch(Throwable e)
 		{
 			System.out.println("error" + e);
 		}
-	  return flag;
+		return flag;
 	}
 
 	public static final byte[] function(byte abyte0[])
