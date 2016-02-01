@@ -15,77 +15,76 @@ import javax.crypto.spec.SecretKeySpec;
 
 class BruteForce {
 
-		static final int DIGIT_NUM = 16;
-		static final char[] candidates = "0123456789abcdef".toCharArray();
-	  static final int candLength = candidates.length;
-	  static int[] indexes;
+	static final int DIGIT_NUM = 16;
+	static final char[] candidates = "0123456789abcdef".toCharArray();
+	static final int candLength = candidates.length;
+	static int[] indexes;
 
-		public static void main(String args[]){
-			indexes = new int[DIGIT_NUM];
-	    for (int i = 0; i < DIGIT_NUM; i++) {
-	      if (rePermutation(0, i)) {
-				  break;
-				}
-	    }
-			return;
-		}
-
-	  private static boolean rePermutation(int i, int j) {
-	    indexes[i] = j;
-	    String uid = "";
-
-	    if (i == DIGIT_NUM - 1) {
-	      for (int n = 0; n < DIGIT_NUM; n++) {
-	        uid += candidates[indexes[n]];
-	      }
-	      System.out.println(uid);
-	      if (judge(uid)) {
-	        return true;
-	      }
-	    } else {
-	      i++;
-	      for (int k = 0; k < DIGIT_NUM; k++) {
-	        if (rePermutation(i, k)) {
-	          return true;
-	        }
-	      }
-	    }
-	    return false;
-	  }
-
-	  private static final boolean judge(final String uid) {
-	    byte[] stream = tryData(uid);
-	    if (stream != null) {
-	      try {
-	        String flag = new String(stream, "UTF-8");
-	        if(flag.startsWith("SECCON{")) {
-	          System.out.println("flag = " + flag);
-	          return true;
-	        }
-	      } catch (Exception e) {
-	        System.out.println("Cannot convert to string!");
-	      }
-	    }
-	    return false;
-	  }
-
-		private static final byte[] tryData(String uid) {
-			String strKey = "fuO/gyps1L1JZwet4jYaU0hNvIxa/ncffqy+3fEHIn4=";
-			byte[] result = null;
-			try
-			{
-				SecretKeySpec key = new SecretKeySpec(uid.getBytes(), "AES");
-				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-				cipher.init(2, key);
-				byte[] stream = function(strKey.getBytes());
-				result = cipher.doFinal(stream);
-		  }
-	    catch(Throwable e)
-			{
-				//System.out.println("error" + e);
+	public static void main(String args[]){
+		indexes = new int[DIGIT_NUM];
+		for (int i = 0; i < DIGIT_NUM; i++) {
+			if (rePermutation(0, i)) {
+				break;
 			}
-		  return result;
 		}
+		return;
+	}
+
+	private static boolean rePermutation(int i, int j) {
+		indexes[i] = j;
+		String uid = "";
+
+		if (i == DIGIT_NUM - 1) {
+			for (int n = 0; n < DIGIT_NUM; n++) {
+				uid += candidates[indexes[n]];
+			}
+			System.out.println(uid);
+			if (judge(uid)) {
+				return true;
+			}
+		} else {
+			i++;
+			for (int k = 0; k < DIGIT_NUM; k++) {
+				if (rePermutation(i, k)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static final boolean judge(final String uid) {
+		byte[] stream = tryData(uid);
+		if (stream != null) {
+			try {
+				String flag = new String(stream, "UTF-8");
+				if(flag.startsWith("SECCON{")) {
+					System.out.println("flag = " + flag);
+					return true;
+				}
+			} catch (Exception e) {
+				System.out.println("Cannot convert to string!");
+			}
+		}
+		return false;
+	}
+
+	private static final byte[] tryData(String uid) {
+		String strKey = "fuO/gyps1L1JZwet4jYaU0hNvIxa/ncffqy+3fEHIn4=";
+		byte[] result = null;
+		try
+		{
+			SecretKeySpec key = new SecretKeySpec(uid.getBytes(), "AES");
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(2, key);
+			byte[] stream = function(strKey.getBytes());
+			result = cipher.doFinal(stream);
+		}
+		catch(Throwable e) {
+			//System.out.println("error" + e);
+		}
+		return result;
+	}
 
 		private static final byte[] function(byte abyte0[])
 		{
